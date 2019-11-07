@@ -5,9 +5,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node -r esm index.js"
+    "start": "node index.js",
+    "test": "jest --config jest.config.js --no-cache",
+    "test-watch": "jest --config jest.config.js --watch --no-cache"
   },
-  "dependencies": {
-    "esm": "^3.2.25"
+  "devDependencies": {
+    "@babel/preset-env": "^7.7.1",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0"
   }
 }

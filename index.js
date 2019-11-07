@@ -1,6 +1,4 @@
-import {applicableOffers, itemValues, chosenItems} from './values';
-
-const filterOffers = (offers, items) =>
+export const filterOffers = (offers, items) =>
   Object.keys(offers).reduce((acc, offerKey) => {
     const offer = offers[offerKey];
     const allowed = !Object.keys(offer.combination).find(
@@ -29,7 +27,7 @@ const filterOffers = (offers, items) =>
     availableItems: Object.assign({}, items),
   });
 
-const calcOfferGain = (allowed, offers, itemValues) => {
+export const calcOfferGain = (allowed, offers, itemValues) => {
   let gain = 0;
   allowed.forEach(offerKey => {
     const offer = offers[offerKey];
@@ -52,7 +50,7 @@ const calcOfferGain = (allowed, offers, itemValues) => {
   return gain;
 };
 
-const findLeastClearanceNeeded = allowedPerItem =>
+export const findLeastClearanceNeeded = allowedPerItem =>
   Object
     .keys(allowedPerItem)
     .reduce((acc, curr) => [...acc, allowedPerItem[curr]], [])
@@ -60,7 +58,7 @@ const findLeastClearanceNeeded = allowedPerItem =>
     .shift();
 
 
-const getOverlappingScenarios = (offers, items, itemValues) => {
+export const getOverlappingScenarios = (offers, items, itemValues) => {
   let offerKeys = Object.keys(offers).reduce((acc, curr) => ({...acc, [curr]: true}), {});
   let scenarios = [];
   let leastClearanceNeeded;
@@ -73,7 +71,7 @@ const getOverlappingScenarios = (offers, items, itemValues) => {
       return acc;
     }, {});
 
-    const {allowed, overlapping, allowedPerItem, availableItems} = filterOffers(includedOffers, items);
+    const {allowed, allowedPerItem} = filterOffers(includedOffers, items);
 
     leastClearanceNeeded = findLeastClearanceNeeded(allowedPerItem);
     if (leastClearanceNeeded) {
@@ -92,12 +90,10 @@ const getOverlappingScenarios = (offers, items, itemValues) => {
   return scenarios;
 }
 
-const getBestScenario = overlappingScenarios =>
+export const getBestScenario = overlappingScenarios =>
   overlappingScenarios
     .sort((a,b) => a.gain - b.gain)
     .shift();
 
-const bestScenario = getBestScenario(getOverlappingScenarios(applicableOffers, chosenItems, itemValues));
-
-console.log(bestScenario);
-
+export const getBestOffers = (applicableOffers, chosenItems, itemValues) =>
+  getBestScenario(getOverlappingScenarios(applicableOffers, chosenItems, itemValues));
